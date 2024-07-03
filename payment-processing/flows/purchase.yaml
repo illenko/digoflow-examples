@@ -57,6 +57,15 @@ tasks:
   - id: generateOrderId
     type: uuidGenerator
 
+  - id: saveToDb
+    type: digoflow.sql
+    input:
+      - name: query
+        type: string
+        value: |
+          INSERT INTO payment (id, description, amount, card, payer_details, payment_system)
+          VALUES ('{{ output.generateOrderId.result }}', '{{ input.body.description }}', {{ input.body.amount }}, '{{ input.body.card }}', '{{ output.buildPayerDetails.result }}', '{{ output.buildPayerDetails.result }}')
+
   - id: callToPaymentSystem
     type: digoflow.httpRequest
     input:

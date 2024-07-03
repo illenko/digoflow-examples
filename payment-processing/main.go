@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/google/uuid"
 	"github.com/illenko/digoflow"
+	"github.com/illenko/digoflow/container"
 	"github.com/illenko/digoflow/task"
 )
 
@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	app.RegisterTask("uuidGenerator", uuidGenerator)
+	app.RegisterTask("uuidGenerator", &UUIDGenerator{})
 
 	err = app.Start()
 
@@ -27,6 +27,8 @@ func main() {
 	}
 }
 
-func uuidGenerator(_ task.Input) (task.Output, error) {
+type UUIDGenerator struct{}
+
+func (t *UUIDGenerator) Execute(_ *container.Container, _ task.Input) (task.Output, error) {
 	return task.Output{"result": uuid.New().String()}, nil
 }
